@@ -108,3 +108,78 @@ g | 全局匹配，找到所有的匹配
 m | 多行匹配模式
 
 #### 7. 模式匹配的String方法
+
+##### search
+
+search参数是一个正则表达式，返回第一个与之匹配的子串的起始位置，如果没有找到匹配的则返回-1.search方法不支持全局检索，会忽略修饰符g。
+
+```
+JavaScript.search(/script/i);	//4
+```
+
+##### replace
+
+replace方法用于检索并替换子串，其中第一个参数是正则表达式，第二个是要进行替换的字符串，如果带有修饰符g则替换所有匹配的子串，如果没有g则只替换第一个匹配的子串。
+
+```
+str.replace(/javascript/ig,"JavaScript");	//将str中所有的javascript都换成大写的JavaScript
+```
+
+##### match
+match方法是最常用的String正则表达式方法。它只接受一个正则参数，返回一个数组，数组包含正则所匹配到的结果。
+
+```
+"1 plus 2 equals 3".match(/\d+/g);	//["1","2","3"],如果没有g,则match不进行全局检索
+```
+
+#### split
+
+split方法用于对字符串进行分割，其参数可以是一个字符串，也可以是一个正则表达式对象。
+
+```
+"123,456,789".split(",");	//["123","456","789"]
+```
+
+```
+"1, 2, 3, 4, 5".split(/\s*,\s*/);	//["1","2","3","4","5"]
+```
+
+#### 6. RegExp对象
+
+##### RegExp对象的属性
+
+- source，一个只读字符串，包含正则表达式的文本
+- global，只读的布尔值，用来说明是否全局匹配
+- ingoreCase，只读的布尔值，用来说明是否忽略大小写
+- multiline，只读的布尔值，用来说明是否带有修饰符m
+- lastIndex,可读/写的整数，如果带有修饰符g，则这个属性记录下一次检索的开始位置，会被exec和test方法用到
+
+##### RegExp方法
+
+###### exec
+
+exec方法与match方法类似，只不过用法不同，exec方法的参数为原字符串，而match方法参数为正则表达式。
+
+无论exec方法有没有指定g修饰符，exec都返回同样的数组，当调用exec时，RegExp对象会将其lastIndex属性设置为子串的起始位置，每调用一次，都会设置一次。下次调用的时候会从上次的lastIndex位置开始，当没有匹配到时，回返回null。所以可以利用这特性反复调用exec方法。
+
+exec方法返回一个数组包含了index属性，表示匹配的子串在原字符串中的起始索引。
+
+```
+var pattern = /Java/g;
+var text = "JavaScript is more fun than Java";
+var result;
+while((result = pattern.exec(text))){
+	alert("Matched '"+result[0]+"'"+"at position "+result.index+"; next search begins at "+pattern.lastIndex);
+}
+
+```
+
+
+###### test
+
+test方法用来检测字符串中是否包含子串，如果包含则返回true，否则返回false。
+
+```
+var pattern = /java/i;
+pattern.test("JavaScript");	//true
+```
