@@ -4,3 +4,4 @@
 
 - [let,const,解构赋值](https://github.com/xswei/JavaScript/edit/master/ES6/01/)
 - [Unicode,字符串新特性](https://github.com/xswei/JavaScript/tree/master/ES6/02)
+- [正则和数值的扩展](https://github.com/xswei/JavaScript/tree/master/ES6/03)
