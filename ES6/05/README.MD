@@ -196,3 +196,141 @@ var proxy = new Proxy(target,{
 
 
 ### Promise
+
+Promise是一个可以传递异步操作的对象。有以下特点:
+
+- 对象的状态不受外界影响。Promise对象代表一个异步操作，有3种状态:Pending(进行中),Resolved(已完成)和Rejected(已失败)。
+
+- 对象的状态一旦改变就不会再次被其他手段改变，状态的改变有两种可能:从Pending变成Resolved和从Pending变成Rejected。
+
+#### 基本用法
+
+Promise是一个对象，在使用前首先对其进行实例化:
+
+```js
+var promise = new Promise(function(resolve,reject){
+	//...do something
+
+	if(//操作成功){
+		resolve(value);
+	}else{
+		reject(error);
+	}
+})
+
+```
+Promise构造函数接受一个函数为参数，这个函数的两个参数分别为resolve和reject。这两个参数也为函数，不需要自己指定。
+
+resolve函数的作用是当异步操作执行成功时候将操作结果作为参数传递出去，reject的作用是当异步操作失败时候将失败信息作为参数传递出去。
+
+在实例化Promise对象之后，可以用then方法分别指定成功或失败后的回调函数:
+
+```js
+promise.then(function(value){
+	//成功时执行
+},function(error){
+	//失败时执行
+})
+
+```
+
+下面是一个异步加载图片的例子:
+
+```js
+function loadImage(url){
+	return new Promise(function(resolve,reject){
+		var image = new Image();
+		image.onload = function(){
+			resolve(image);
+		}
+		image.onerror = function(){
+			reject(new Error("Couldn't load image at "+url));
+		}
+		image.src = url;
+	})
+}
+
+loadImage("./img.png").then((image)=>{
+	console.log(image)
+	document.body.append(image);	//如果成功将其追加到body中
+},(err)=>{
+	console.log(err);				//失败的话打印失败信息
+})
+
+```
+
+在上述例子中，resolve和reject函数的参数都为一个确切的值，除此之外resolve的值还可以为另一个Peomise实例，这样就形成了多个异步操作之间的衔接。
+
+```js
+var p1 = new Promise((resolve,reject)=>{
+	//...
+})
+var p2 = new Promise((resolve,reject)=>{
+	//...
+	resolve(p1);
+})
+
+```
+
+在上述代码中,p2的resolve函数参数为p1,也就是p2的异步操作结果返回另一个异步操作。
+
+此时p1的状态决定了p2的状态，当p1为Pending时,p2的回调就会等待p1的结果。如果p1的状态改为Resolved则p2的回调就会立即执行。如果p1的状态改为Rejected则p2也会变为Rejected。
+
+#### Promise.prototype.then()
+
+用来为Promise实例添加状态改变时的回调函数。
+
+#### Promise.prototype.catch()
+
+可以看做是.then(null,rejection)的别名，用以指定发生错误时的回调函数。
+
+```js
+
+promise.then((value)=>{
+	//success
+}).catch((err)=>{
+	//failed
+})
+
+```
+
+#### Promise.all()
+
+用来将多个Promise实例包装成一个Promise实例
+
+```js
+var p = Promise.all([p1,p2,p3]);
+
+```
+
+此时p的状态就由p1,p2,p3共同决定，只有p1,p2,p3的状态都为Resolve时p的状态才为Resolve.
+
+#### Promise.race()
+
+也用来将多个Promise实例包装成一个Promise实例，与Promise.all()不同的是p1,p2,p3中只要有一个状态改变则包装后的实例状态就跟着改变
+
+#### Promise.resolve()
+
+将现有的对象转为Promise对象。
+
+比如:
+
+```js
+var promise = Promise.resolve($.ajax("./data.json"))
+
+```
+
+#### done()和finally()
+
+done()方法也可以链式使用。不管使用then方法还是catch方法，本身then方法和catch方法也可能抛出错误，这些错误没有办法被捕捉到，因为Promise内部的错误不会被冒泡到全局，因此在链式回调的末端需要使用done()方法可以保证出错时候被捕捉到。
+
+```js
+promise.then(...)
+	.catch(...)
+	.then(...)
+	.catch(...)
+	.done()
+
+```
+
+finally方法用于指定不管Promise对象的最后状态如何都会执行的操作。与done不同的是finally接受一个普通的函数为参数，无论最后结果如何都会执行。
