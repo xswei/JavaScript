@@ -5,4 +5,4 @@ JavaScript学习笔记
 - [正则表达式](https://github.com/xswei/JavaScript/tree/master/RegExp)
 - [客户端JavaScript](https://github.com/xswei/JavaScript/tree/master/Client_JavaScript)
 - [设计模式-继承](https://github.com/xswei/JavaScript/tree/master/inherit)
-- [设计模式-创建](https://github.com/xswei/JavaScript/tree/master/Create)
+- [设计模式-创建型模式](https://github.com/xswei/JavaScript/tree/master/Create)
