@@ -10,3 +10,4 @@ function func(a,b=2){
 }
 
 ```
+参数a的默认值为2
