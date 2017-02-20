@@ -8,7 +8,6 @@
 - [数组扩展和对象扩展](https://github.com/xswei/JavaScript/tree/master/ES6/04)
 - [Proxy Reflect Promise](https://github.com/xswei/JavaScript/tree/master/ES6/05)
 - [Module](https://github.com/xswei/JavaScript/tree/master/ES6/06)
-
-
+- [函数扩展](https://github.com/xswei/JavaScript/tree/master/ES6/07)
 
 
